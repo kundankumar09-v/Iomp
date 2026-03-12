@@ -1,19 +1,53 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { MapContainer, ImageOverlay, Marker, Popup, useMapEvents, Polyline } from "react-leaflet";
+import { MapContainer, ImageOverlay, SVGOverlay, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./AdminMapeditor.css";
+import "../components/VenueMap.css";
+
+/* Dark Among Us style — with light grid lines */
+const BG_SVG = (() => {
+  const W = 800, H = 800, rw = 32;
+  const xs = [0, 200, 400, 600, W];
+  let s = `<rect width="${W}" height="${H}" fill="#0d1117"/>`;
+  for (let r = 0; r < xs.length - 1; r++) {
+    for (let c = 0; c < xs.length - 1; c++) {
+      const bx = xs[c] + rw, by = xs[r] + rw;
+      const bw = xs[c+1] - xs[c] - rw*2, bh = xs[r+1] - xs[r] - rw*2;
+      if (bw > 0 && bh > 0) {
+        s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="#111827" rx="4" stroke="#1e2d4a" stroke-width="1" opacity="0.7"/>`;
+      }
+    }
+  }
+  xs.forEach(x => s += `<rect x="${x}" y="0" width="${rw}" height="${H}" fill="#090d14"/>`);
+  xs.forEach(y => s += `<rect x="0" y="${y}" width="${W}" height="${rw}" fill="#090d14"/>`);
+  s += `<rect x="${W-rw}" y="0" width="${rw}" height="${H}" fill="#090d14"/>`;
+  s += `<rect x="0" y="${H-rw}" width="${W}" height="${rw}" fill="#090d14"/>`;
+  xs.forEach(x => s += `<line x1="${x+rw/2}" y1="0" x2="${x+rw/2}" y2="${H}" stroke="#2a4a8a" stroke-width="1.5" stroke-dasharray="10,6" opacity="0.8"/>`);
+  xs.forEach(y => s += `<line x1="0" y1="${y+rw/2}" x2="${W}" y2="${y+rw/2}" stroke="#2a4a8a" stroke-width="1.5" stroke-dasharray="10,6" opacity="0.8"/>`);
+  s += `<line x1="${W-rw/2}" y1="0" x2="${W-rw/2}" y2="${H}" stroke="#2a4a8a" stroke-width="1.5" stroke-dasharray="10,6" opacity="0.8"/>`;
+  s += `<line x1="0" y1="${H-rw/2}" x2="${W}" y2="${H-rw/2}" stroke="#2a4a8a" stroke-width="1.5" stroke-dasharray="10,6" opacity="0.8"/>`;
+  const rng = (seed, mx) => (Math.sin(seed * 9.341) * 0.5 + 0.5) * mx;
+  for (let i = 0; i < 60; i++) {
+    const sx = rng(i*7+1,W), sy = rng(i*13+3,H), r2 = (rng(i*3+2,1.2)+0.3).toFixed(1);
+    s += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${r2}" fill="#ffffff" opacity="${(rng(i*5+4,0.35)+0.05).toFixed(2)}"/>`;
+  }
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">${s}</svg>`);
+})();
+
 
 function MapClickHandler({ setClickPos }) {
   useMapEvents({
     click(e) {
-      // Map Leaflet [lat, lng] to original percentage [y, x] with origin at top-left
-      // Make sure values stay between 0 and 100
-      let x = Math.max(0, Math.min(100, e.latlng.lng));
-      let y = Math.max(0, Math.min(100, 100 - e.latlng.lat));
-      setClickPos({ x, y });
+      const snapPoints = [12.5, 37.5, 62.5, 87.5];
+      const snap = (v) => snapPoints.reduce((p, c) => Math.abs(c - v) < Math.abs(p - v) ? c : p);
+      
+      let rawX = Math.max(0, Math.min(100, e.latlng.lng));
+      let rawY = Math.max(0, Math.min(100, 100 - e.latlng.lat));
+      
+      setClickPos({ x: snap(rawX), y: snap(rawY) });
     },
   });
   return null;
@@ -33,28 +67,41 @@ function AdminMapEditor() {
 
   // 🧪 DEBUG
   useEffect(() => {
-    console.log("EVENT ID:", eventId);
-    console.log("LAYOUT IMAGE:", layoutImage);
-  }, [eventId, layoutImage]);
-
-  // 🎨 icons
-  const getIcon = (type) => {
-    const map = {
-      "stall": "🛍️",
-      "stage": "🎤",
-      "restroom": "🚻",
-      "food": "🍔",
-      "entry": "🚪",
-      "exit": "🏁",
-      "help": "🧭",
-      "pointer": "📍"
+    const fetchStalls = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/stalls/${eventId}`);
+        setStalls(res.data);
+      } catch (err) {
+        console.error("Error fetching stalls:", err);
+      }
     };
-    const emoji = map[type] || "📍";
+    if (eventId) fetchStalls();
+  }, [eventId]);
+
+  const getIcon = (type, name = "") => {
+    const c = {
+      stall:   { emoji: "🛍️", color: "#4285f4" },
+      stage:   { emoji: "🎤", color: "#fbbc05" },
+      restroom:{ emoji: "🚻", color: "#34a853" },
+      food:    { emoji: "🍔", color: "#ea4335" },
+      entry:   { emoji: "🚪", color: "#9c27b0" },
+      exit:    { emoji: "🏁", color: "#607d8b" },
+      help:    { emoji: "🧭", color: "#ff5722" },
+      pointer: { emoji: "📍", color: "#ff0844" },
+    }[type] || { emoji: "📍", color: "#ff0844" };
+    const label = name ? `<div class="vm-pin-label" style="--label-color:${c.color}">${name}</div>` : "";
     return L.divIcon({
-      className: "custom-emoji-icon",
-      html: `<div style="font-size: 28px; text-shadow: 0 4px 8px rgba(0,0,0,0.8); text-align: center;">${emoji}</div>`,
-      iconSize: [36, 36],
-      iconAnchor: [18, 18], // Center the icon
+      className: "",
+      html: `
+        <div class="vm-marker-wrap">
+          <div class="vm-room-pin" style="--pin-color:${c.color}">
+            <span class="vm-room-emoji">${c.emoji}</span>
+          </div>
+          ${name ? `<div class="vm-room-label" style="--label-color:${c.color}">${name}</div>` : ""}
+        </div>`,
+      iconSize: [80, 80],
+      iconAnchor: [40, 40],
+      popupAnchor: [0, -50],
     });
   };
 
@@ -98,49 +145,12 @@ function AdminMapEditor() {
     );
   }
 
-  const formatImageUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith("http")) return path;
-    return `http://localhost:5000/${path.replace(/\\/g, "/")}`;
-  };
+
 
   const mapBounds = [[0, 0], [100, 100]];
-  const imageUrl = formatImageUrl(layoutImage);
 
-  // 🟦 Draw Grid Overlay
-  const renderGrid = () => {
-    const lines = [];
-    const spacing = 10; // Every 10%
-    // Note: Leaflet CRS.Simple uses [y, x] for positions on standard Cartesian, mapped here to [100-y, x] typically for ImageOverlay, 
-    // but our image overlay is from [0,0] to [100,100]. 
 
-    // Vertical lines
-    for (let i = 0; i <= 100; i += spacing) {
-      lines.push(
-        <Polyline
-          key={`v-${i}`}
-          positions={[[0, i], [100, i]]}
-          color="rgba(148, 163, 184, 0.4)" // lighter color for dark bg
-          weight={1.5}
-          dashArray="4, 4"
-        />
-      );
-    }
 
-    // Horizontal lines
-    for (let i = 0; i <= 100; i += spacing) {
-      lines.push(
-        <Polyline
-          key={`h-${i}`}
-          positions={[[i, 0], [i, 100]]}
-          color="rgba(148, 163, 184, 0.4)" // lighter color for dark bg
-          weight={1.5}
-          dashArray="4, 4"
-        />
-      );
-    }
-    return lines;
-  };
 
   return (
     <div className="map-editor-container">
@@ -156,13 +166,44 @@ function AdminMapEditor() {
           bounds={mapBounds}
           maxBounds={[[ -20, -20 ], [ 120, 120 ]]} // Allow some dragging outside but bounce back
         >
-          <ImageOverlay url={imageUrl} bounds={mapBounds} />
-          {renderGrid()}
+          {/* Beige block-map — always shown */}
+          <ImageOverlay url={BG_SVG} bounds={mapBounds} />
+
+          {/* Dynamic Beige Block Zones & Highlight Circles */}
+          <SVGOverlay bounds={mapBounds} attributes={{ style: "overflow:visible;pointer-events:none" }}>
+            {stalls.map((s, i) => {
+              const bx = s.x - 8.5, by = (100 - s.y) - 8.5;
+              const c = { stall: "#4285f4", stage: "#fbbc05", restroom: "#34a853", food: "#ea4335", entry: "#9c27b0", exit: "#607d8b", help: "#ff5722" }[s.type] || "#4285f4";
+              return (
+                <g key={`zone-bg-${i}`}>
+                  <rect x={bx} y={by} width={17} height={17} fill="#e5dece" rx="0.625"/>
+                  <rect x={bx + 1} y={by + 1} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.6"/>
+                  <rect x={bx + 9} y={by + 1} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.6"/>
+                  <rect x={bx + 1} y={by + 9} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.5"/>
+                  <rect x={bx + 9} y={by + 9} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.5"/>
+
+                  <circle cx={s.x} cy={100 - s.y} r={6} fill={c} fillOpacity="0.15" stroke={c} strokeWidth="0.6" strokeDasharray="1.5,1.5" />
+                  <circle cx={s.x} cy={100 - s.y} r={2} fill={c} fillOpacity="0.5" />
+                </g>
+              );
+            })}
+            
+            {clickPos && (
+              <g>
+                <rect x={clickPos.x - 8.5} y={(100 - clickPos.y) - 8.5} width={17} height={17} fill="#e5dece" rx="0.625" opacity="0.8"/>
+                <rect x={clickPos.x - 7.5} y={(100 - clickPos.y) - 7.5} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.6"/>
+                <rect x={clickPos.x + 0.5} y={(100 - clickPos.y) - 7.5} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.6"/>
+                <rect x={clickPos.x - 7.5} y={(100 - clickPos.y) + 0.5} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.5"/>
+                <rect x={clickPos.x + 0.5} y={(100 - clickPos.y) + 0.5} width={7} height={7} fill="#d9d2be" rx="0.375" opacity="0.5"/>
+              </g>
+            )}
+          </SVGOverlay>
+
           <MapClickHandler setClickPos={setClickPos} />
 
           {/* 🔴 saved markers */}
           {stalls.map((s, i) => (
-            <Marker key={i} position={[100 - s.y, s.x]} icon={getIcon(s.type)}>
+            <Marker key={i} position={[100 - s.y, s.x]} icon={getIcon(s.type, s.name)}>
               <Popup>
                 <strong>{s.name}</strong> <br /> 
                 <span style={{ textTransform: "capitalize" }}>{s.type}</span>
