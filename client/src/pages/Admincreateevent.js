@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_URL from "../config";
 
 function AdminCreateEvent() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ function AdminCreateEvent() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/events/create",
+        `${API_URL}/api/events/create`,
         data,
         {
           headers: {

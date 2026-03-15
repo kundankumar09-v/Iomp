@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaQrcode, FaSignInAlt, FaSearch, FaUserAstronaut } from "react-icons/fa";
 import axios from "axios";
+import API_URL from "../config";
 import "./Home.css";
 
 function Home() {
@@ -45,23 +46,24 @@ function Home() {
     }
   ];
 
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/events`);
+      setEvents(res.data);
+    } catch (err) {
+      console.error("Failed to fetch events:", err);
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
   }, []);
 
-  const fetchEvents = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/events");
-      setEvents(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const formatImageUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://localhost:5000/${path.replace(/\\/g, "/")}`;
+    return `${API_URL}/${path.replace(/\\/g, "/")}`;
   };
 
   const filteredEvents = events.filter((event) => {

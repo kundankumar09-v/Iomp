@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, ImageOverlay, SVGOverlay, Marker, Popup, Polyline } from "react-leaflet";
 import L from "leaflet";
 import axios from "axios";
+import API_URL from "../config";
 import "leaflet/dist/leaflet.css";
 import "./VenueMap.css";
 
@@ -111,18 +112,18 @@ export default function VenueMap({ eventId }) {
 
   useEffect(() => {
     if (!eventId) { setLoading(false); return; }
-    axios.get(`http://localhost:5000/api/stalls/${eventId}`)
+    axios.get(`${API_URL}/api/stalls/${eventId}`)
       .then(r => { setStalls(r.data); const e = r.data.find(s => s.type === "entry"); if (e) setRouteStart(e); })
       .catch(console.error).finally(() => setLoading(false));
   }, [eventId]);
 
-  const fetchFeedback = (sid) => axios.get(`http://localhost:5000/api/visits/feedback/${sid}`).then(r => setFeedbackList(r.data)).catch(console.error);
+  const fetchFeedback = (sid) => axios.get(`${API_URL}/api/visits/feedback/${sid}`).then(r => setFeedbackList(r.data)).catch(console.error);
   const handleSetStart = (stall) => { setRouteStart(stall); alert(`🚩 Start: ${stall.name}`); };
   const handleSetEnd   = (stall) => { setRouteEnd(stall === routeEnd ? null : stall); };
   const handleVisit = async (stall) => {
     const username = localStorage.getItem("wahap_temp_user") || "Anonymous";
     if (!feedback.trim()) return alert("Please write feedback first!");
-    await axios.post("http://localhost:5000/api/visits/record", { username, stallId: stall._id, eventId, feedback });
+    await axios.post(`${API_URL}/api/visits/record`, { username, stallId: stall._id, eventId, feedback });
     const updated = [...new Set([...visitedIds, stall._id])];
     setVisitedIds(updated);
     localStorage.setItem("vm_visited_" + eventId, JSON.stringify(updated));

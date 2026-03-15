@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import API_URL from "../config";
 import { MapContainer, ImageOverlay, SVGOverlay, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -69,7 +70,7 @@ function AdminMapEditor() {
   useEffect(() => {
     const fetchStalls = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/stalls/${eventId}`);
+        const res = await axios.get(`${API_URL}/api/stalls/${eventId}`);
         setStalls(res.data);
       } catch (err) {
         console.error("Error fetching stalls:", err);
@@ -89,7 +90,6 @@ function AdminMapEditor() {
       help:    { emoji: "🧭", color: "#ff5722" },
       pointer: { emoji: "📍", color: "#ff0844" },
     }[type] || { emoji: "📍", color: "#ff0844" };
-    const label = name ? `<div class="vm-pin-label" style="--label-color:${c.color}">${name}</div>` : "";
     return L.divIcon({
       className: "",
       html: `
@@ -113,7 +113,7 @@ function AdminMapEditor() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/stalls/add", {
+      await axios.post(`${API_URL}/api/stalls/add`, {
         eventId,
         name: stallName,
         type: stallType,

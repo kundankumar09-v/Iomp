@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import API_URL from "../config";
 import VenueMap from "../components/VenueMap";
 
 function EventDetails() {
@@ -10,7 +11,7 @@ function EventDetails() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/events/${id}`);
+        const res = await axios.get(`${API_URL}/api/events/${id}`);
         setEvent(res.data);
       } catch (err) {
         console.error(err);
@@ -24,7 +25,7 @@ function EventDetails() {
   const formatImageUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://localhost:5000/${path.replace(/\\/g, "/")}`;
+    return `${API_URL}/${path.replace(/\\/g, "/")}`;
   };
 
   return (

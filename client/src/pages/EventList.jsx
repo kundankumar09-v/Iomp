@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config";
 import "./EventList.css";
 
 function EventList() {
@@ -14,7 +15,7 @@ function EventList() {
   const fetchEvents = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/events?city=${city}&type=${type}`
+        `${API_URL}/api/events?city=${city}&type=${type}`
       );
       setEvents(res.data);
     } catch (err) {
@@ -62,7 +63,7 @@ function EventList() {
           >
 
             <img
-              src={`http://localhost:5000/${event.eventImage?.replace(/\\/g, "/")}`}
+              src={`${API_URL}/${event.eventImage?.replace(/\\/g, "/")}`}
               alt={event.name}
               className="card-img"
             />
