@@ -34,6 +34,7 @@ exports.createEvent = async (req, res) => {
       language,
       aboutEvent,
       eventImage: req.files?.eventImage?.[0]?.path,
+      bannerImage: req.files?.bannerImage?.[0]?.path,
       layoutImage: req.files?.layoutImage?.[0]?.path,
     });
 
@@ -55,12 +56,13 @@ exports.createEvent = async (req, res) => {
 // GET ALL EVENTS
 exports.getEvents = async (req, res) => {
   try {
-    let { city, type } = req.query;
+    let { city, type, query } = req.query;
 
     const filter = {};
 
     if (city) filter.city = city.trim();
     if (type) filter.type = type.toLowerCase().trim();
+    if (query) filter.name = { $regex: query.trim(), $options: "i" };
 
     const events = await Event.find(filter).sort({ createdAt: -1 });
 

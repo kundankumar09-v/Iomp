@@ -180,8 +180,15 @@
 
   .footer-bottom {
     flex-direction: column;
-    gap: 15px;
-    padding: 20px 24px;
+    gap: 20px;
+    padding: 30px 24px;
+    text-align: center;
+  }
+  
+  .footer-bottom-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px 25px;
   }
 
   .footer-links a:hover,

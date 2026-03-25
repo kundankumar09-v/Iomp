@@ -15,6 +15,7 @@ const eventSchema = new mongoose.Schema(
     aboutEvent: String,
 
     eventImage: String,
+    bannerImage: String,
     layoutImage: String,
 
     createdBy: String,

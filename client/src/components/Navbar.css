@@ -330,6 +330,27 @@
   margin: 0 20px;
 }
 
+.dropdown-item {
+  width: 100%;
+  padding: 12px 18px;
+  text-align: left;
+  border: none;
+  background: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f8fafc;
+  color: #ff0844;
+}
+
 .dropdown-logout {
   width: 100%;
   padding: 14px 20px;
@@ -506,7 +527,8 @@
   }
 
   .navbar-logo {
-    font-size: 28px;
+    font-size: 24px;
+    letter-spacing: -0.8px;
   }
   
   .navbar-main {

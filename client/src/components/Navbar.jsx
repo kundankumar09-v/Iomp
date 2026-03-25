@@ -163,6 +163,15 @@ function Navbar() {
                     </div>
                   </div>
                   <div className="dropdown-divider" />
+                  {(localStorage.getItem("wahap_user_email")?.toLowerCase() === "admin@wahap.com" || 
+                    localStorage.getItem("wahap_user_email")?.toLowerCase() === "admin@gmail.com") && (
+                    <>
+                      <Link to="/admin" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                        Manager Console
+                      </Link>
+                      <div className="dropdown-divider" />
+                    </>
+                  )}
                   <button onClick={handleLogout} className="dropdown-logout">
                     Sign Out
                   </button>

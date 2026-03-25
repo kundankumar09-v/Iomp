@@ -11,6 +11,7 @@ function EventList() {
   const [events, setEvents] = useState([]);
   const [city, setCity] = useState("");
   const [type, setType] = useState("");
+  const [search, setSearch] = useState("");
   const [params] = useSearchParams();
   const [initialized, setInitialized] = useState(false);
 
@@ -20,6 +21,7 @@ function EventList() {
   useEffect(() => {
     const selectedType = params.get("type");
     const selectedCity = params.get("city");
+    const selectedSearch = params.get("query");
 
     if (selectedType) {
       setType(normalizeType(selectedType));
@@ -31,6 +33,12 @@ function EventList() {
       setCity(selectedCity);
     } else {
       setCity("");
+    }
+
+    if (selectedSearch) {
+      setSearch(selectedSearch);
+    } else {
+      setSearch("");
     }
 
     setInitialized(true);
@@ -45,6 +53,7 @@ function EventList() {
         const query = new URLSearchParams();
         if (city) query.set("city", city);
         if (type) query.set("type", type);
+        if (search) query.set("query", search);
 
         const res = await axios.get(
           `${API_URL}/api/events${query.toString() ? `?${query.toString()}` : ""}`
@@ -57,7 +66,7 @@ function EventList() {
     };
 
     fetchEvents();
-  }, [city, type, initialized]);
+  }, [city, type, search, initialized]);
 
   const formatDate = (startDate, endDate) => {
     if (!startDate) return "TBA";
@@ -90,6 +99,21 @@ function EventList() {
     <div className="event-page">
 
       <h2>Explore Events</h2>
+      {search && (
+        <div className="search-status" style={{ marginBottom: '20px', color: '#64748b' }}>
+          Showing results for "<strong>{search}</strong>"
+          <button 
+            onClick={() => {
+              const newParams = new URLSearchParams(params);
+              newParams.delete("query");
+              navigate(`?${newParams.toString()}`);
+            }}
+            style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#ff0844', cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Clear search
+          </button>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="filters">

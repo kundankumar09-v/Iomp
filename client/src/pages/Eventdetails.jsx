@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { FaArrowLeft, FaClock, FaCalendarAlt, FaUsers, FaGlobe, FaMapMarkerAlt, FaTag, FaHourglass, FaQrcode, FaMap } from "react-icons/fa";
+import { FaArrowLeft, FaClock, FaCalendarAlt, FaUsers, FaGlobe, FaMapMarkerAlt, FaTag, FaHourglass, FaQrcode, FaMap, FaSignInAlt } from "react-icons/fa";
 import { MdLocalOffer } from "react-icons/md";
 import { QRCodeCanvas } from "qrcode.react";
 import VenueMap from "../components/VenueMap";
@@ -183,15 +183,27 @@ function EventDetails() {
                 </h3>
                 <p className="section-subtitle">Explore the venue, locate stalls, and plan your visit.</p>
               </div>
-              <button 
-                className="full-view-btn" 
-                onClick={() => navigate(`/event/${id}/map`)}
-              >
-                Go Full Screen
-              </button>
+              {localStorage.getItem("wahap_temp_user") && (
+                <button 
+                  className="full-view-btn" 
+                  onClick={() => navigate(`/event/${id}/map`)}
+                >
+                  Go Full Screen
+                </button>
+              )}
             </div>
+            
             <div className="map-container-wrapper">
-              <VenueMap eventId={id} />
+              {localStorage.getItem("wahap_temp_user") ? (
+                <VenueMap eventId={id} />
+              ) : (
+                <div className="map-auth-overlay" style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', borderRadius: '16px', border: '1.5px dashed #e2e8f0', flexDirection: 'column', gap: '15px' }}>
+                  <FaMap size={40} style={{ color: '#cbd5e1' }} />
+                  <p style={{ color: '#64748b', fontSize: '15px', fontWeight: '500' }}>
+                    <Link to="/signin" style={{ color: '#ff0844', textDecoration: 'none', borderBottom: '1px solid #ff0844' }}>Sign in</Link> to explore the interactive map
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -296,17 +308,28 @@ function EventDetails() {
             </div>
 
             <div className="qr-reveal-section" style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '20px', textAlign: 'center' }}>
-                <button 
-                  onClick={() => setShowQR(!showQR)}
-                  style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 auto', fontSize: '14px', fontWeight: '600' }}
-                >
-                  <FaQrcode /> {showQR ? "Hide Event QR" : "Generate Event QR"}
-                </button>
-                
-                {showQR && (
-                  <div style={{ marginTop: '15px', background: 'white', padding: '15px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', display: 'inline-block' }}>
-                    <QRCodeCanvas value={id} size={160} level="H" includeMargin={true} />
-                    <p style={{ fontSize: '12px', color: '#64748b', marginTop: '10px' }}>Scan this code to enter the event</p>
+                {localStorage.getItem("wahap_temp_user") ? (
+                  <>
+                    <button 
+                      onClick={() => setShowQR(!showQR)}
+                      style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 auto', fontSize: '14px', fontWeight: '600', transition: 'all 0.3s ease' }}
+                    >
+                      <FaQrcode /> {showQR ? "Hide Event QR" : "Generate Event QR"}
+                    </button>
+                    
+                    {showQR && (
+                      <div style={{ marginTop: '15px', background: 'white', padding: '15px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', display: 'inline-block' }}>
+                        <QRCodeCanvas value={id} size={160} level="H" includeMargin={true} />
+                        <p style={{ fontSize: '12px', color: '#64748b', marginTop: '10px' }}>Scan this code to enter the event</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="qr-auth-prompt" style={{ padding: '15px', background: '#f8fafc', borderRadius: '12px', border: '1.5px dashed #e2e8f0' }}>
+                    <p style={{ margin: 0, fontSize: '14px', color: '#444', fontWeight: '600' }}>
+                      <FaSignInAlt style={{ marginRight: '8px', color: '#ff0844' }} />
+                      <Link to="/signin" style={{ color: '#ff0844', textDecoration: 'none', borderBottom: '1px solid #ff0844' }}>Sign in</Link> to generate entry QR code
+                    </p>
                   </div>
                 )}
             </div>

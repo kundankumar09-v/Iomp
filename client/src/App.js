@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import EventList from "./pages/EventList";
 import EventDetails from "./pages/Eventdetails";
 import EventMap from "./pages/EventMap";
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminCreateEvent from "./pages/Admincreateevent";
 import AdminMapEditor from "./pages/AdminMapeditor";
 import QrScanner from "./pages/QrScanner";
@@ -12,27 +13,40 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { Navigate } from "react-router-dom";
+
+// 🔐 Admin Guard
+const ProtectedRoute = ({ children }) => {
+  const userEmail = localStorage.getItem("wahap_user_email");
+  const isAdmin = userEmail?.toLowerCase() === "admin@wahap.com" || userEmail?.toLowerCase() === "admin@gmail.com";
+  
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
 
 function AppContent() {
   const location = useLocation();
-  const isMapPage = location.pathname.includes("/map");
+  const hideNavbarFooter = location.pathname.includes("/map") || location.pathname.startsWith("/admin");
 
   return (
     <>
-      {!isMapPage && <Navbar />}
+      {!hideNavbarFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<EventList />} />
         <Route path="/event/:id" element={<EventDetails />} />
         <Route path="/event/:id/map" element={<EventMap />} />
         <Route path="/scan-qr" element={<QrScanner />} />
-        <Route path="/admin" element={<AdminCreateEvent />} />
-        <Route path="/admin/map/:eventId" element={<AdminMapEditor />} />
-        <Route path="/admin/banners" element={<ManagerBanners />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/create" element={<ProtectedRoute><AdminCreateEvent /></ProtectedRoute>} />
+        <Route path="/admin/map/:eventId" element={<ProtectedRoute><AdminMapEditor /></ProtectedRoute>} />
+        <Route path="/admin/banners" element={<ProtectedRoute><ManagerBanners /></ProtectedRoute>} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>
-      {!isMapPage && <Footer />}
+      {!hideNavbarFooter && <Footer />}
     </>
   );
 }

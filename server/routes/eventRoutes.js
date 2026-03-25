@@ -12,6 +12,7 @@ router.post(
   "/create",
   upload.fields([
     { name: "eventImage", maxCount: 1 },
+    { name: "bannerImage", maxCount: 1 },
     { name: "layoutImage", maxCount: 1 }
   ]),
   createEvent
