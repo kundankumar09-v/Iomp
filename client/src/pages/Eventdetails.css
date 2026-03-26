@@ -11,9 +11,13 @@
 /* Header Strip */
 .details-header-strip {
   padding: 40px 60px 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
   gap: 20px;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .back-link {
@@ -161,10 +165,10 @@
 /* Sidebar Card / Right */
 .details-side-card {
   background: white;
-  border-radius: 24px;
+  border-radius: 28px;
   padding: 30px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-  border: 1px solid #f1f5f9;
+  box-shadow: var(--premium-shadow);
+  border: 1px solid rgba(0,0,0,0.03);
   position: sticky;
   top: 100px;
 }

@@ -47,8 +47,8 @@ function EventDetails() {
     return `${startStr} onwards`;
   };
 
-  const images = event?.eventImages?.length > 0 
-    ? event.eventImages.map(formatImageUrl) 
+  const images = event?.eventImages?.length > 0
+    ? event.eventImages.map(formatImageUrl)
     : event ? [formatImageUrl(event.bannerImage || event.eventImage || "")].filter(Boolean) : [];
 
   useEffect(() => {
@@ -105,115 +105,115 @@ function EventDetails() {
           <div className="details-side-card">
             <div className="details-grid">
               <div className="detail-row">
-                 <FaCalendarAlt className="row-icon" />
-                 <div className="row-info">
-                   <small>DATE</small>
-                   <span>{formatEventDate(event.date, event.endDate)}</span>
-                 </div>
+                <FaCalendarAlt className="row-icon" />
+                <div className="row-info">
+                  <small>DATE</small>
+                  <span>{formatEventDate(event.date, event.endDate)}</span>
+                </div>
               </div>
               <div className="detail-row">
-                 <FaClock className="row-icon" />
-                 <div className="row-info">
-                   <small>DURATION</small>
-                   <span>{event.duration || "1h 30m"}</span>
-                 </div>
+                <FaClock className="row-icon" />
+                <div className="row-info">
+                  <small>DURATION</small>
+                  <span>{event.duration || "1h 30m"}</span>
+                </div>
               </div>
               <div className="detail-row">
-                 <FaUsers className="row-icon" />
-                 <div className="row-info">
-                   <small>AGE LIMIT</small>
-                   <span>{event.ageLimit ? `${event.ageLimit}+` : "All Ages"}</span>
-                 </div>
+                <FaUsers className="row-icon" />
+                <div className="row-info">
+                  <small>AGE LIMIT</small>
+                  <span>{event.ageLimit ? `${event.ageLimit}+` : "All Ages"}</span>
+                </div>
               </div>
               <div className="detail-row">
-                 <FaGlobe className="row-icon" />
-                 <div className="row-info">
-                   <small>LANGUAGE</small>
-                   <span>{event.language || "English / Local"}</span>
-                 </div>
+                <FaGlobe className="row-icon" />
+                <div className="row-info">
+                  <small>LANGUAGE</small>
+                  <span>{event.language || "English / Local"}</span>
+                </div>
               </div>
               <div className="detail-row">
-                 <FaTag className="row-icon" />
-                 <div className="row-info">
-                   <small>EVENT TYPE</small>
-                   <span>{event.type || "N/A"}</span>
-                 </div>
+                <FaTag className="row-icon" />
+                <div className="row-info">
+                  <small>EVENT TYPE</small>
+                  <span>{event.type || "N/A"}</span>
+                </div>
               </div>
               <div className="detail-row">
-                 <FaMapMarkerAlt className="row-icon" />
-                 <div className="row-info">
-                   <small>LOCATION</small>
-                   <span>{event.city}</span>
-                   {event.address && <p className="row-address">{event.address}</p>}
-                 </div>
+                <FaMapMarkerAlt className="row-icon" />
+                <div className="row-info">
+                  <small>LOCATION</small>
+                  <span>{event.city}</span>
+                  {event.address && <p className="row-address">{event.address}</p>}
+                </div>
               </div>
               <div className="detail-row">
-                 <MdLocalOffer className="row-icon" />
-                 <div className="row-info">
-                   <small>TICKET TYPE</small>
-                   <span>{event.ticketType || "General Admission"}</span>
-                 </div>
+                <MdLocalOffer className="row-icon" />
+                <div className="row-info">
+                  <small>TICKET TYPE</small>
+                  <span>{event.ticketType || "General Admission"}</span>
+                </div>
               </div>
             </div>
 
             <div className="sidebar-qr-section">
-                {localStorage.getItem("wahap_temp_user") ? (
-                  <>
-                    <button onClick={() => setShowQR(!showQR)} className="qr-reveal-btn">
-                      <FaQrcode /> {showQR ? "Hide Entry Pass" : "Entry QR Code"}
-                    </button>
-                    {showQR && (
-                      <div className="qr-box-inner">
-                        <QRCodeCanvas value={id} size={150} level="H" includeMargin={true} />
-                        <p>Valid entry pass for this event</p>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="qr-signin-prompt">
-                    <FaSignInAlt className="icon-small" />
-                    <Link to="/signin">Sign in</Link> for entry QR code
-                  </div>
-                )}
+              {localStorage.getItem("wahap_temp_user") ? (
+                <>
+                  <button onClick={() => setShowQR(!showQR)} className="qr-reveal-btn">
+                    <FaQrcode /> {showQR ? "Hide Entry Pass" : "Entry QR Code"}
+                  </button>
+                  {showQR && (
+                    <div className="qr-box-inner">
+                      <QRCodeCanvas value={id} size={150} level="H" includeMargin={true} />
+                      <p>Valid entry pass for this event</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="qr-signin-prompt">
+                  <FaSignInAlt className="icon-small" />
+                  <Link to="/signin">Sign in</Link> for entry QR code
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <div className="details-bottom-section">
-          <div className="about-block">
-            <h3 className="block-title">About the Event</h3>
-            <div className={`about-para ${expanded ? "expanded" : ""}`}>
-              {description.split('\n').map((para, i) => <p key={i}>{para}</p>)}
+        <div className="about-block">
+          <h3 className="block-title">About the Event</h3>
+          <div className={`about-para ${expanded ? "expanded" : ""}`}>
+            {description.split('\n').map((para, i) => <p key={i}>{para}</p>)}
+          </div>
+          {isLongDescription && (
+            <button className="read-more" onClick={() => setExpanded(!expanded)}>
+              {expanded ? "Read Less" : "Read More"}
+            </button>
+          )}
+        </div>
+
+        <div className="interactive-map-block">
+          <div className="block-header">
+            <div>
+              <h3 className="block-title">Interactive Venue Map</h3>
+              <p className="block-sub">Locate stalls, stages, and facilities in real-time.</p>
             </div>
-            {isLongDescription && (
-              <button className="read-more" onClick={() => setExpanded(!expanded)}>
-                {expanded ? "Read Less" : "Read More"}
-              </button>
+            {localStorage.getItem("wahap_temp_user") && (
+              <button className="expand-map-btn" onClick={() => navigate(`/event/${id}/map`)}>Go Full Screen</button>
             )}
           </div>
-
-          <div className="interactive-map-block">
-            <div className="block-header">
-               <div>
-                  <h3 className="block-title">Interactive Venue Map</h3>
-                  <p className="block-sub">Locate stalls, stages, and facilities in real-time.</p>
-               </div>
-               {localStorage.getItem("wahap_temp_user") && (
-                 <button className="expand-map-btn" onClick={() => navigate(`/event/${id}/map`)}>Go Full Screen</button>
-               )}
-            </div>
-            <div className="map-embed-frame">
-              {localStorage.getItem("wahap_temp_user") ? (
-                <VenueMap eventId={id} />
-              ) : (
-                <div className="map-lock-overlay">
-                   <FaMap className="lock-icon" />
-                   <p><Link to="/signin">Sign in</Link> to interact with the venue map</p>
-                </div>
-              )}
-            </div>
+          <div className="map-embed-frame">
+            {localStorage.getItem("wahap_temp_user") ? (
+              <VenueMap eventId={id} />
+            ) : (
+              <div className="map-lock-overlay">
+                <FaMap className="lock-icon" />
+                <p><Link to="/signin">Sign in</Link> to interact with the venue map</p>
+              </div>
+            )}
           </div>
+        </div>
       </div>
     </div>
   );

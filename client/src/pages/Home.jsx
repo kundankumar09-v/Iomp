@@ -191,28 +191,28 @@ function Home() {
               </div>
             ))}
           </div>
-          
+
           {heroBanners.length > 1 && (
             <>
-              <button 
-                className="carousel-btn prev" 
+              <button
+                className="carousel-btn prev"
                 onClick={() => setHeroIndex((heroIndex - 1 + heroBanners.length) % heroBanners.length)}
                 aria-label="Previous Banner"
               >
                 <FaChevronLeft />
               </button>
-              <button 
-                className="carousel-btn next" 
+              <button
+                className="carousel-btn next"
                 onClick={() => setHeroIndex((heroIndex + 1) % heroBanners.length)}
                 aria-label="Next Banner"
               >
                 <FaChevronRight />
               </button>
-              
+
               <div className="carousel-pagination">
                 {heroBanners.map((_, idx) => (
-                  <button 
-                    key={idx} 
+                  <button
+                    key={idx}
                     className={`nav-dot ${heroIndex === idx ? 'active' : ''}`}
                     onClick={() => setHeroIndex(idx)}
                     aria-label={`Go to slide ${idx + 1}`}

@@ -1,16 +1,15 @@
-/* Navbar Container */
 .navbar-container {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--glass-border);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .navbar-main {
@@ -55,23 +54,23 @@
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: #f8f6f2;
-  border-radius: 16px;
-  padding: 6px;
-  border: 1px solid rgba(0,0,0,0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  background-color: #f1f5f9;
+  border-radius: 14px;
+  padding: 4px;
+  border: 1.5px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .search-wrapper:hover {
-  border-color: #efbfa3;
   background-color: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: var(--soft-shadow);
 }
 
 .search-wrapper:focus-within {
-  background-color: white;
-  box-shadow: 0 4px 20px rgba(214, 69, 31, 0.12), 0 0 0 1px #efbfa3;
-  border-color: #efbfa3;
+  background-color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 8, 68, 0.1);
 }
 
 .location-box {
@@ -168,7 +167,7 @@
 }
 
 .signin-btn {
-  background: linear-gradient(135deg, #ff0844 0%, #ff4b2b 100%);
+  background: var(--grad-primary);
   color: white;
   border: none;
   padding: 12px 28px;
@@ -176,17 +175,17 @@
   font-weight: 800;
   font-family: inherit;
   cursor: pointer;
-  box-shadow: 0 8px 20px -6px rgba(255, 8, 68, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(255, 8, 68, 0.4);
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .signin-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px -8px rgba(255, 8, 68, 0.5);
-  filter: brightness(1.1);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 30px -8px rgba(255, 8, 68, 0.5);
+  filter: brightness(1.05);
 }
 
 /* User Avatar Button */
@@ -199,17 +198,18 @@
   align-items: center;
   gap: 10px;
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #f1f5f9;
   border-radius: 50px;
-  padding: 5px 14px 5px 5px;
+  padding: 6px 16px 6px 6px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  box-shadow: var(--soft-shadow);
 }
 
 .user-avatar-btn:hover {
-  border-color: #ff0844;
-  box-shadow: 0 4px 16px rgba(255, 8, 68, 0.12);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 8, 68, 0.1);
 }
 
 .user-avatar {

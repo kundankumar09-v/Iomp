@@ -78,7 +78,7 @@ function EventList() {
       {search && (
         <div className="search-status" style={{ marginBottom: '20px', color: '#64748b' }}>
           Showing results for "<strong>{search}</strong>"
-          <button 
+          <button
             onClick={() => {
               const newParams = new URLSearchParams(params);
               newParams.delete("query");
@@ -94,8 +94,8 @@ function EventList() {
       {/* Filters */}
       <div className="filters">
 
-        <select 
-          value={city} 
+        <select
+          value={city}
           onChange={(e) => {
             const newCity = e.target.value;
             const newParams = new URLSearchParams(params);
@@ -115,8 +115,8 @@ function EventList() {
           <option value="LB Nagar">LB Nagar</option>
         </select>
 
-        <select 
-          value={type} 
+        <select
+          value={type}
           onChange={(e) => {
             const newType = e.target.value;
             const newParams = new URLSearchParams(params);
