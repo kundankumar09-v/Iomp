@@ -6,13 +6,22 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
+
+        {/* Brand */}
         <div className="footer-section">
-          <div className="footer-logo">WAHAP</div>
-          <p className="footer-tagline">
-            Experience the best events, concerts, and stall maps in one premium platform.
-          </p>
+          <div className="footer-brand-block">
+            <div className="footer-logo">WAHAP</div>
+            <p className="footer-tagline">
+              Experience the best events, concerts, and stall maps in one premium platform.
+            </p>
+            <span className="footer-badge">
+              <span className="footer-badge-dot" />
+              Live Now in India
+            </span>
+          </div>
         </div>
 
+        {/* Quick Links */}
         <div className="footer-section">
           <h4 className="footer-heading">Quick Links</h4>
           <ul className="footer-links">
@@ -22,6 +31,7 @@ function Footer() {
           </ul>
         </div>
 
+        {/* Categories */}
         <div className="footer-section">
           <h4 className="footer-heading">Categories</h4>
           <ul className="footer-links">
@@ -33,8 +43,9 @@ function Footer() {
           </ul>
         </div>
 
+        {/* Contact */}
         <div className="footer-section">
-          <h4 className="footer-heading">Contact Info</h4>
+          <h4 className="footer-heading">Contact</h4>
           <ul className="footer-contact">
             <li className="contact-item">
               <MdEmail className="contact-icon" />
@@ -49,10 +60,8 @@ function Footer() {
               <span>India</span>
             </li>
           </ul>
-        </div>
 
-        <div className="footer-section">
-          <h4 className="footer-heading">Follow Us</h4>
+          <h4 className="footer-heading" style={{ marginTop: '16px' }}>Follow Us</h4>
           <ul className="footer-social">
             <li>
               <a href="https://instagram.com/wahap_official" target="_blank" rel="noopener noreferrer">
@@ -71,10 +80,13 @@ function Footer() {
             </li>
           </ul>
         </div>
+
       </div>
 
+      <div className="footer-divider" />
+
       <div className="footer-bottom">
-        <p>&copy; 2026 WAHAP. All rights reserved.</p>
+        <p>© 2026 WAHAP. All rights reserved.</p>
         <div className="footer-bottom-links">
           <a href="#privacy">Privacy Policy</a>
           <a href="#terms">Terms of Service</a>

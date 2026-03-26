@@ -209,53 +209,55 @@ function Navbar() {
 
       {/* Mobile Menu */}
       <div className={`navbar-mobile-menu ${isMenuOpen ? "open" : ""}`}>
-        <div className="mobile-search-section">
-          <div className="mobile-search-wrapper">
-            <div className="mobile-location-box">
-              <FaMapMarkerAlt className="loc-icon" />
-              <select
-                value={selectedCity}
-                onChange={handleCityChange}
-                className="location-select"
-              >
-                {CITIES.map(city => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
-            </div>
-            <form className="mobile-search-bar" onSubmit={handleSearch}>
-              <FaSearch className="search-icon" />
-              <input
-                className="search-input"
-                placeholder="Search events..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </form>
-          </div>
-        </div>
-
-        <div className="mobile-nav-links">
-          <button className="mobile-nav-btn qr" onClick={() => { navigate("/scan-qr"); setIsMenuOpen(false); }}>
-            <FaQrcode className="btn-icon" /> Scan QR
-          </button>
-
-          {user ? (
-            <div className="mobile-user-info">
-              <div className="mobile-avatar-row">
-                <div className="user-avatar">{getInitials(user)}</div>
-                <div>
-                  <div className="mobile-user-name">{user}</div>
-                  <div className="mobile-user-role">Attendee</div>
-                </div>
+        <div className="mobile-menu-inner">
+          <div className="mobile-search-section">
+            <div className="mobile-search-wrapper">
+              <div className="mobile-location-box">
+                <FaMapMarkerAlt className="loc-icon" />
+                <select
+                  value={selectedCity}
+                  onChange={handleCityChange}
+                  className="location-select"
+                >
+                  {CITIES.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
               </div>
-              <button onClick={handleLogout} className="mobile-logout-btn">Sign Out</button>
+              <form className="mobile-search-bar" onSubmit={handleSearch}>
+                <FaSearch className="search-icon" />
+                <input
+                  className="search-input"
+                  placeholder="Search events..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </form>
             </div>
-          ) : (
-            <button className="mobile-nav-btn signin" onClick={() => { navigate("/signin"); setIsMenuOpen(false); }}>
-              <FaSignInAlt className="btn-icon" /> Sign In
+          </div>
+
+          <div className="mobile-nav-links">
+            <button className="mobile-nav-btn qr" onClick={() => { navigate("/scan-qr"); setIsMenuOpen(false); }}>
+              <FaQrcode className="btn-icon" /> Scan QR
             </button>
-          )}
+
+            {user ? (
+              <div className="mobile-user-info">
+                <div className="mobile-avatar-row">
+                  <div className="user-avatar">{getInitials(user)}</div>
+                  <div>
+                    <div className="mobile-user-name">{user}</div>
+                    <div className="mobile-user-role">Attendee</div>
+                  </div>
+                </div>
+                <button onClick={handleLogout} className="mobile-logout-btn">Sign Out</button>
+              </div>
+            ) : (
+              <button className="mobile-nav-btn signin" onClick={() => { navigate("/signin"); setIsMenuOpen(false); }}>
+                <FaSignInAlt className="btn-icon" /> Sign In
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </nav>

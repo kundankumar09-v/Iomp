@@ -3,6 +3,14 @@ import { Link } from "react-router-dom";
 import {
   FaChevronLeft,
   FaChevronRight,
+  FaMapMarkedAlt,
+  FaQrcode,
+  FaShieldAlt,
+  FaBolt,
+  FaRegCalendarAlt,
+  FaUsers,
+  FaStar,
+  FaArrowRight,
 } from "react-icons/fa";
 import axios from "axios";
 import API_URL from "../config";
@@ -224,6 +232,9 @@ function Home() {
         </div>
       </section>
 
+
+
+
       <div className="section-meta">
         <h2 className="section-title">Explore by Event Type</h2>
         <p>
@@ -299,6 +310,68 @@ function Home() {
           </section>
         ))
       )}
+
+
+      {/* ===== WHY WAHAP — GLASS FEATURE CARDS ===== */}
+      <section className="why-section">
+        <div className="why-header">
+          <span className="why-badge">Why choose us</span>
+          <h2 className="why-title">Everything you need for<br />an unforgettable experience</h2>
+          <p className="why-subtitle">WAHAP brings curated events, venue maps, and QR entry — all in one place.</p>
+        </div>
+
+        <div className="why-grid">
+          <div className="glass-card">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#ff0844,#ff4b2b)' }}>
+              <FaRegCalendarAlt />
+            </div>
+            <h3>Curated Events</h3>
+            <p>Handpicked concerts, festivals, workshops, and more from top organizers.</p>
+          </div>
+
+          <div className="glass-card glass-card--accent">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#7c3aed,#a855f7)' }}>
+              <FaMapMarkedAlt />
+            </div>
+            <h3>Venue Maps</h3>
+            <p>Navigate venues with interactive stall maps and find your way around.</p>
+          </div>
+
+          <div className="glass-card">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#0ea5e9,#38bdf8)' }}>
+              <FaQrcode />
+            </div>
+            <h3>QR-Based Entry</h3>
+            <p>Enter events with a unique QR code — fast, secure, and paperless.</p>
+          </div>
+
+          <div className="glass-card">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#f59e0b,#fbbf24)' }}>
+              <FaBolt />
+            </div>
+            <h3>Instant Discovery</h3>
+            <p>Search by city, type, or date and find the perfect event in seconds.</p>
+          </div>
+
+          <div className="glass-card glass-card--accent">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#10b981,#34d399)' }}>
+              <FaShieldAlt />
+            </div>
+            <h3>Verified &amp; Secure</h3>
+            <p>Every event is reviewed so you only attend legit, quality experiences.</p>
+          </div>
+
+          <div className="glass-card">
+            <div className="glass-card-icon" style={{ background: 'linear-gradient(135deg,#ec4899,#f472b6)' }}>
+              <FaUsers />
+            </div>
+            <h3>Community-Driven</h3>
+            <p>Join event-lovers who trust WAHAP for their plans every week.</p>
+          </div>
+        </div>
+      </section>
+
+
     </div>
   );
 }

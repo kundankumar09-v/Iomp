@@ -1,206 +1,307 @@
+/* ========================= ADMIN DASHBOARD ========================= */
 .admin-dashboard {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 32px 80px;
   font-family: 'Outfit', sans-serif;
-  color: #1e293b;
+  color: var(--light);
+  animation: fadeIn 0.6s ease-out;
+  background: var(--dark);
+  min-height: 100vh;
 }
 
+/* ---- Header ---- */
 .admin-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px;
+  align-items: flex-start;
+  margin-bottom: 56px;
+  gap: 24px;
 }
 
 .admin-header h1 {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 900;
-  letter-spacing: -2px;
-  margin: 0;
+  letter-spacing: -2.5px;
+  margin: 0 0 8px;
   background: var(--grad-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
 }
 
 .admin-header p {
-  color: #64748b;
-  font-size: 16px;
-  margin: 8px 0 0 0;
+  color: var(--slate);
+  font-size: 15px;
+  font-weight: 500;
+  margin: 8px 0 0;
 }
 
+/* Stats Row */
+.admin-stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.admin-stat-card {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 20px 28px;
+  flex: 1;
+  min-width: 140px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.admin-stat-card .stat-number {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.admin-stat-card .stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--slate);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ---- Create Button ---- */
 .create-btn {
-  background: linear-gradient(135deg, #ff0844 0%, #ff5e3a 100%);
+  background: var(--grad-primary);
   color: white;
   border: none;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 800;
+  padding: 15px 28px;
+  border-radius: 18px;
+  font-weight: 900;
   font-size: 15px;
+  font-family: inherit;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 8, 68, 0.25);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(255, 8, 68, 0.3);
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .create-btn:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(255, 8, 68, 0.35);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(255, 8, 68, 0.5);
 }
 
+/* ---- Grid ---- */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
+  gap: 28px;
 }
 
+/* ---- Card ---- */
 .event-card-admin {
-  background: white;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
   border-radius: 28px;
   overflow: hidden;
-  box-shadow: var(--soft-shadow);
-  border: 1px solid #f1f5f9;
-  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
   display: flex;
   flex-direction: column;
 }
 
 .event-card-admin:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.12);
+  transform: translateY(-10px);
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
 }
 
-.event-info {
-  position: relative;
-}
+.event-info { position: relative; }
 
 .event-card-img {
   width: 100%;
-  height: 200px;
+  height: 210px;
   object-fit: cover;
-  background: #f1f5f9;
+  background: #0f172a;
+  display: block;
+}
+
+/* Status badge on card */
+.event-info::after {
+  content: 'LIVE';
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--grad-primary);
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 50px;
 }
 
 .text-content {
-  padding: 24px 24px 12px;
+  padding: 22px 24px 14px;
+  flex: 1;
 }
 
 .text-content h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
-  color: #0f172a;
+  color: var(--light);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .text-content p {
-  margin: 6px 0 0 0;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 500;
+  margin: 8px 0 0;
+  color: var(--slate);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
+.text-content p::before { content: '📍'; font-size: 11px; }
+
+/* ---- Actions ---- */
 .admin-actions {
-  padding: 0 24px 24px;
+  padding: 0 20px 20px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-top: auto;
 }
 
 .action-btn.map {
   flex: 1;
-  background: #0f172a;
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  color: var(--light);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 13px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
 }
 
 .action-btn.map:hover {
-  background: #1e293b;
-  gap: 15px;
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 10px 20px rgba(255,8,68,0.3);
+  transform: translateY(-1px);
 }
 
-.small-actions {
-  display: flex;
-  gap: 8px;
-}
+.small-actions { display: flex; gap: 8px; }
 
 .small-btn {
-  border: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
   font-size: 16px;
 }
 
 .small-btn.edit {
-  background: #f1f5f9;
-  color: #475569;
+  background: rgba(255,255,255,0.05);
+  color: var(--light);
 }
 
 .small-btn.edit:hover {
-  background: #0f172a;
-  color: white;
+  background: var(--light);
+  color: var(--dark);
+  transform: translateY(-2px);
 }
 
 .small-btn.danger {
-  background: #fee2e2;
+  background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .small-btn.danger:hover {
   background: #ef4444;
   color: white;
-  transform: rotate(8deg);
+  transform: scale(1.1) rotate(5deg);
 }
 
+/* ---- Empty State ---- */
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 100px 0;
-  background: #f8fafc;
-  border-radius: 30px;
-  border: 2px dashed #e2e8f0;
+  padding: 80px 40px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 28px;
+  border: 2px dashed rgba(255,255,255,0.1);
 }
 
 .empty-state h2 {
+  font-size: 26px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--light);
   margin: 20px 0 10px;
 }
 
+.empty-state p {
+  color: var(--slate);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Loading spinner */
 .admin-loading {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 400px;
-  font-size: 18px;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 16px;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--slate);
 }
 
-@media (max-width: 640px) {
-  .admin-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-  }
-  .create-btn {
-    width: 100%;
-    justify-content: center;
-  }
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .admin-dashboard { padding: 28px 16px 60px; }
+  .admin-header h1 { font-size: 34px; }
+  .events-grid { grid-template-columns: 1fr; gap: 20px; }
+  .admin-stats-row { gap: 12px; }
+  .admin-stat-card { min-width: 120px; padding: 16px 20px; }
+  .admin-stat-card .stat-number { font-size: 28px; }
 }
